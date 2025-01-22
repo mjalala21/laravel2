@@ -68,9 +68,9 @@
                                     @if($user->trashed())
                                     <a class="btn btn-success mb-1" href="{{route('activateUser',['id'=>encrypt($user->userId)])}}">Activate User</a>
                                     @endif
-                                    <a class="btn btn-primary" href="{{route('viewUser',['id'=>encrypt($user->userId)])}}">Edit</a>
+                                    <a class="btn btn-primary" href="{{route('editUser',['id'=>encrypt($user->userId)])}}">Edit</a>
 
-                                    <a class="btn btn-dark" href="{{route('viewUser',['id'=>encrypt($user->userId)])}}">View</a>
+                                    <a class="btn btn-info" href="{{route('viewUser',['id'=>encrypt($user->userId)])}}">View</a>
                                     <a class="btn btn-warning" href="{{ route('deleteUser', ['id' => encrypt($user->userId)]) }}">Delete</a>
                                     <a class="btn btn-danger" href="{{ route('forceDelete', ['id' => encrypt($user->userId)]) }}"> Force Delete</a>
                                 </td>

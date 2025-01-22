@@ -8,8 +8,8 @@
 
 <div class="card">
     <div class="card-body">
-        {{-- <ul>
-            <li> Name : {{ $user->name}}</li>
+         <ul>
+            <li> Name : {{  $user->name}}</li>
             <li> Phone : {{ $user->phone}}</li>
             <li> Email: {{ $user->email}}</li>
         </ul>
@@ -25,25 +25,25 @@
                 State: {{ $user->userDetails->state}}
 
             </li>
-        </ul> --}}
-        <ul>
+        </ul> 
+        {{-- <ul>
             <li> Name : {{ $userDetails->user->name}}</li>
             <li> Phone : {{ $userDetails->user->phone}}</li>
             <li> Email: {{ $userDetails->user->email}}</li>
         </ul>
         <ul>
             <li>
-                Education : {{ $userDetails->user->education}}
+                Education : {{ $userDetails->education}}
             </li>
             <li>
-                Country : {{ $userDetails->user->country}}
+                Country : {{ $userDetails->country}}
 
             </li>
             <li>
-                State: {{ $userDetails->user->state}}
+                State: {{ $userDetails->state}}
 
             </li>
-        </ul>
+        </ul> --}}
     </div>
 </div>
 @endsection

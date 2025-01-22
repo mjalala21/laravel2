@@ -6,7 +6,9 @@ use App\Models\User;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
 
-class Frontentcontroller extends Controller
+
+
+class frontentController extends Controller
 {
 
 
@@ -48,27 +50,57 @@ class Frontentcontroller extends Controller
   }
   public function saveUser(Request $request)
   {
-    $name = $request->name;
-    $phone = $request->phone;
-    $address = $request->address;
-    $dob = $request->dob;
-    $status = $request->status;
+    // $request->validate([
+    //   
+
+    // ]);
+    request()->validate([
+      'name' => 'required|min:6|max:10',
+      'phone' => 'required|integer',
+      'address' => 'required',
+      'dob' => 'required',
+    ]);
+
+
+
+
+    //   $request->validate([
+    //     'name' => ['required'],
+    //       'phone' => ['required'], 
+    //       'address' => ['required'],
+    //      'dob' => ['required'],
+    // ])->validate();
+    // $name = $request->name;
+    // $phone = $request->phone;
+    // $address = $request->address;
+    // $dob = $request->dob;
+    // $status = $request->status;
     //echo $name;
     //echo $phone;
     //return view('saveUser');
-    $user = User::create(
-      [
-        'name' => $name,
-        'phone' => $phone,
-        'address' => $address,
-        'dob' => $dob,
-        'status' => $status,
-      ]
-    );
+
+
+    // $user = User::create([
+    //     'name' => $name,
+    //     'phone' => $phone,
+    //     'address' => $address,
+    //     'dob' => $dob,
+    //     'status' => $status,
+    //   ]
+    // );
 
     //return "inserted";
-    return redirect()->route('home')->with('message', 'User Created Successfully');
+    $user = new User();
+    $user->name = $request->name;
+    $user->phone = $request->phone;
+    $user->address = $request->address;
+    $user->dob = $request->dob;
+    $user->status = $request->dob;
+    $user->save();
 
+    $user->save();
+
+    return redirect()->route('home')->with('message', 'User Created Successfully');
 
     // $user = new User();
 
@@ -76,33 +108,37 @@ class Frontentcontroller extends Controller
     // $user->phone=$phone;
     // $user->address=$address;
     // $user->dob=$dob;
-    //$user->status=$status;
-    //$user->save();
+    // $user->status=$status;
+    // $user->save();
+
+    // return redirect()->route('home')->with('message', 'User Created Successfully');
   }
+
+
   public function editUser($i)
   {
     $userId = decrypt($i);
     $user = User::find($userId);
     //return $user;
-  return view('editUser', compact('user'));
+    return view('editUser', compact('user'));
   }
   public function viewUser($i)
   {
     $userId = decrypt($i);
-    // $user = User::find($userId);
-    $userDetails= UserDetail::find($userId);
-  
-  return view('viewUser', compact('userDetails'));
+    $user = User::find($userId);
+    // $userDetails= UserDetail::find($userId);
+
+    return view('viewUser', compact('user'));
   }
   public function updateUser(Request $request)
   {
-    $userId= decrypt($request->userId);
+    $userId = decrypt($request->userId);
     $user = User::find($userId)->update([
-      'name'=> $request->name,
-      'phone'=> $request->phone,
-      'address'=> $request->address,
-      'dob'=> $request->dob,
-      'status'=> $request->status,
+      'name' => $request->name,
+      'phone' => $request->phone,
+      'address' => $request->address,
+      'dob' => $request->dob,
+      'status' => $request->status,
 
     ]);
     // $user->update([
@@ -113,71 +149,67 @@ class Frontentcontroller extends Controller
     //   'status'=> $request->status,
 
     // ]);
-    return redirect()->route('home')->with('message','User Edited Successfully');
+    return redirect()->route('home')->with('message', 'User Edited Successfully');
   }
 
-public function deleteUser($i)
-{
-  $userId=decrypt($i);
-  $user = User::find($userId)->delete();
-//$user->delete();
-  return redirect()->route('home')->with('message','User Deleted Successfully');
-}
-public function activateUser($i)
-{
-  $userId=decrypt($i);
-  $user = User::withTrashed()->find($userId);
-  $user->restore();
-  return redirect()->route('home')->with('message','User Restored Successfully');
-}
-public function forceDelete($i)
-{
-  $userId=decrypt($i);
-  $user = User::withTrashed()->find($userId);
-  $user->forceDelete();
-  return redirect()->route('home')->with('message','User Fdeleted Successfully');
-}
-public function register()
-{
-  session()->put('username','Amal');
-  session()->put('userId','21');
-  session()->flash('message','message from flash');
-  return redirect()->route('login');
-  // return view('register');
-
-}
-public function login()
-{
-  session()->forget('userId');
-  return view('login');
-
-}
-public function dologin()
-{
-  if(auth()->attempt(['email' => request('email'),'password' => request('password')]))
+  public function deleteUser($i)
   {
-    return 'login successfull';
+    $userId = decrypt($i);
+    $user = User::find($userId)->delete();
+    //$user->delete();
+    return redirect()->route('home')->with('message', 'User Deleted Successfully');
   }
-  else{
-    return 'login failed';
+  public function activateUser($i)
+  {
+    $userId = decrypt($i);
+    $user = User::withTrashed()->find($userId);
+    $user->restore();
+    return redirect()->route('home')->with('message', 'User Restored Successfully');
   }
-  // $input=[
-  //   'email'=>request('email'),
-  //   'password'=> request('password')
-  // ];
-  // $email= request('email');
-  // if (auth()->attempt($input)) {
-  //   $datastore = [
-  //     'email' =>$email,
-  //     'isLoggedIn' =>true
-  //   ];
-  //   session()->put('userDetails',$datastore);
-  //   return redirect()->route('home')->with('message','Login Successfull');
-  // }
-  // else{
-  //   return redirect()->route('login')->with('message','Login failed');
-  // }
-    
+  public function forceDelete($i)
+  {
+    $userId = decrypt($i);
+    $user = User::withTrashed()->find($userId);
+    $user->forceDelete();
+    return redirect()->route('home')->with('message', 'User Fdeleted Successfully');
+  }
+  public function register()
+  {
+    session()->put('username', 'Amal');
+    session()->put('userId', '21');
+    session()->flash('message', 'message from flash');
+    return redirect()->route('login');
+    // return view('register');
+
+  }
+  public function login()
+  {
+    session()->forget('userId');
+    return view('login');
+  }
+  public function dologin()
+  {
+    // if(auth()->attempt(['email' => request('email'),'password' => request('password')]))
+    // {
+    //   return 'login successfull';
+    // }
+    // else{
+    //   return 'login failed';
+    // }
+    $input = [
+      'email' => request('email'),
+      'password' => request('password')
+    ];
+    $email = request('email');
+    if (auth()->attempt($input)) {
+      $datastore = [
+        'email' => $email,
+        'isLoggedIn' => true
+      ];
+      session()->put('userDetails', $datastore);
+      return redirect()->route('home')->with('message', 'Login Successfull');
+    } else {
+      return redirect()->route('login')->with('message', 'Login failed');
+    }
   }
 }
-

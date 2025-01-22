@@ -47,7 +47,7 @@ protected $hidden = ['userId'];
 public function userDetails()
 
 {
-    return $this->hasOne(UserDetail::class, 'user_id','userId');
+    return $this->hasOne(UserDetail::class,'user_id','userId');
 }
  
 }
